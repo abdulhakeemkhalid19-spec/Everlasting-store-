@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0d0305;
+  color: #f5f0e8;
+}
+
+.card {
+  background: linear-gradient(145deg, #1a0508, #2d0a10);
+  border: 1px solid rgba(180, 120, 40, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(180,120,40,0.3);
+  border-color: rgba(180,120,40,0.6);
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #f6d365, #c8960c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.burgundy-btn {
+  background: linear-gradient(135deg, #6b1530, #8b1a3b);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(107,21,48,0.4);
+}
+
+.burgundy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(107,21,48,0.6);
+}
+
+.gold-btn {
+  background: linear-gradient(135deg, #f6d365, #c8960c);
+  color: #1a0508;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.gold-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(198,150,12,0.5);
+}
+
+.badge {
+  background: linear-gradient(135deg, #f6d365, #c8960c);
+  color: #1a0508;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0305;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b1530;
+  border-radius: 3px;
+}
