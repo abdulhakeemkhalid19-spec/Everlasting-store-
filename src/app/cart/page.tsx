@@ -47,8 +47,7 @@ export default function CartPage() {
     })
 
     message += `*Total: ₦${total.toLocaleString()}*\n\n`
-    message += '📍 *Please send your delivery address*\n'
-    message += '💳 *Payment details will be sent to you*'
+    message += '📍 *My location is: ________*\n💳 *Please send your account details as soon as possible*'
 
     const encodedMessage = encodeURIComponent(message)
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
