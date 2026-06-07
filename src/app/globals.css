@@ -10,49 +10,49 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0d0305;
-  color: #f5f0e8;
+  background-color: #fdf8f0;
+  color: #2c2c2c;
 }
 
 .card {
-  background: linear-gradient(145deg, #1a0508, #2d0a10);
-  border: 1px solid rgba(180, 120, 40, 0.3);
+  background: #ffffff;
+  border: 1px solid rgba(135,206,235,0.3);
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 20px rgba(135,206,235,0.15);
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 40px rgba(180,120,40,0.3);
-  border-color: rgba(180,120,40,0.6);
+  box-shadow: 0 12px 40px rgba(135,206,235,0.3);
+  border-color: rgba(135,206,235,0.6);
 }
 
 .gold-text {
-  background: linear-gradient(135deg, #f6d365, #c8960c);
+  background: linear-gradient(135deg, #87CEEB, #1E90FF);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .burgundy-btn {
-  background: linear-gradient(135deg, #6b1530, #8b1a3b);
+  background: linear-gradient(135deg, #87CEEB, #1E90FF);
   color: white;
   border: none;
   cursor: pointer;
   font-weight: 700;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(107,21,48,0.4);
+  box-shadow: 0 4px 15px rgba(135,206,235,0.4);
 }
 
 .burgundy-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(107,21,48,0.6);
+  box-shadow: 0 8px 25px rgba(30,144,255,0.5);
 }
 
 .gold-btn {
-  background: linear-gradient(135deg, #f6d365, #c8960c);
-  color: #1a0508;
+  background: linear-gradient(135deg, #1E90FF, #87CEEB);
+  color: white;
   border: none;
   cursor: pointer;
   font-weight: 700;
@@ -61,12 +61,12 @@ body {
 
 .gold-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(198,150,12,0.5);
+  box-shadow: 0 8px 25px rgba(30,144,255,0.4);
 }
 
 .badge {
-  background: linear-gradient(135deg, #f6d365, #c8960c);
-  color: #1a0508;
+  background: linear-gradient(135deg, #87CEEB, #1E90FF);
+  color: white;
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 11px;
@@ -78,10 +78,10 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0305;
+  background: #fdf8f0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6b1530;
+  background: #87CEEB;
   border-radius: 3px;
 }
