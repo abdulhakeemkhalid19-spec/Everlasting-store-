@@ -28,21 +28,36 @@ body {
   border-color: rgba(135,206,235,0.6);
 }
 
-.gold-text {
-  background: linear-gradient(135deg, #87CEEB, #1E90FF);
+.sky-text {
+  background: linear-gradient(135deg, #1E90FF, #87CEEB);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.burgundy-btn {
-  background: linear-gradient(135deg, #87CEEB, #1E90FF);
+.sky-btn {
+  background: linear-gradient(135deg, #1E90FF, #87CEEB);
   color: white;
   border: none;
   cursor: pointer;
   font-weight: 700;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(135,206,235,0.4);
+  box-shadow: 0 4px 15px rgba(30,144,255,0.3);
+}
+
+.sky-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(30,144,255,0.5);
+}
+
+.burgundy-btn {
+  background: linear-gradient(135deg, #1E90FF, #87CEEB);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(30,144,255,0.3);
 }
 
 .burgundy-btn:hover {
@@ -51,7 +66,7 @@ body {
 }
 
 .gold-btn {
-  background: linear-gradient(135deg, #1E90FF, #87CEEB);
+  background: linear-gradient(135deg, #87CEEB, #1E90FF);
   color: white;
   border: none;
   cursor: pointer;
@@ -64,8 +79,15 @@ body {
   box-shadow: 0 8px 25px rgba(30,144,255,0.4);
 }
 
+.gold-text {
+  background: linear-gradient(135deg, #1E90FF, #87CEEB);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .badge {
-  background: linear-gradient(135deg, #87CEEB, #1E90FF);
+  background: linear-gradient(135deg, #1E90FF, #87CEEB);
   color: white;
   padding: 3px 10px;
   border-radius: 20px;
