@@ -87,15 +87,15 @@ function ShopContent() {
   }
 
   return (
-    <div className="min-h-screen" style={{background: '#0d0305'}}>
+    <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
       {/* Navbar */}
-      <nav style={{background: 'linear-gradient(180deg, #1a0508 0%, rgba(26,5,8,0.97) 100%)', borderBottom: '1px solid rgba(180,120,40,0.3)'}} className="sticky top-0 z-50 shadow-2xl">
+      <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <Link href="/">
             <div>
-              <h1 className="text-xl font-black tracking-wider gold-text">✦ EVERLASTING</h1>
-              <p className="text-xs tracking-widest" style={{color: 'rgba(246,211,101,0.6)'}}>STORE</p>
+              <h1 className="text-xl font-black tracking-wider sky-text">✦ EVERLASTING</h1>
+              <p className="text-xs tracking-widest" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
             </div>
           </Link>
           <div className="flex-1 max-w-sm">
@@ -105,18 +105,18 @@ function ShopContent() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full text-white outline-none text-sm"
-                style={{background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(180,120,40,0.3)'}}
+                className="w-full px-4 py-2.5 rounded-full outline-none text-sm"
+                style={{background: 'rgba(135,206,235,0.1)', border: '1px solid rgba(135,206,235,0.3)', color: '#2c2c2c'}}
               />
-              <span className="absolute right-3 top-2.5" style={{color: '#f6d365'}}>🔍</span>
+              <span className="absolute right-3 top-2.5" style={{color: '#1E90FF'}}>🔍</span>
             </div>
           </div>
           <Link href="/cart" className="relative shrink-0">
-            <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{background: 'rgba(180,120,40,0.2)', border: '1px solid rgba(180,120,40,0.4)'}}>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{background: 'rgba(135,206,235,0.2)', border: '1px solid rgba(135,206,235,0.4)'}}>
               <span className="text-lg">🛒</span>
             </div>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs font-black flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f6d365, #c8960c)', color: '#1a0508'}}>
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs font-black flex items-center justify-center" style={{background: 'linear-gradient(135deg, #1E90FF, #87CEEB)', color: 'white'}}>
                 {cartCount}
               </span>
             )}
@@ -129,14 +129,14 @@ function ShopContent() {
         {/* Sidebar */}
         <div className="hidden sm:block w-52 shrink-0">
           <div className="card p-4 sticky top-24">
-            <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{color: '#f6d365'}}>Categories</p>
+            <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{color: '#1E90FF'}}>Categories</p>
             <div className="space-y-1">
               <button
                 onClick={() => setSelectedCategory('')}
                 className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
                 style={selectedCategory === ''
-                  ? {background: 'linear-gradient(135deg, #6b1530, #8b1a3b)', color: 'white'}
-                  : {color: 'rgba(245,240,232,0.6)'}
+                  ? {background: 'linear-gradient(135deg, #1E90FF, #87CEEB)', color: 'white'}
+                  : {color: 'rgba(44,44,44,0.6)'}
                 }
               >
                 ✨ All Products
@@ -147,8 +147,8 @@ function ShopContent() {
                   onClick={() => setSelectedCategory(cat.slug)}
                   className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
                   style={selectedCategory === cat.slug
-                    ? {background: 'linear-gradient(135deg, #6b1530, #8b1a3b)', color: 'white'}
-                    : {color: 'rgba(245,240,232,0.6)'}
+                    ? {background: 'linear-gradient(135deg, #1E90FF, #87CEEB)', color: 'white'}
+                    : {color: 'rgba(44,44,44,0.6)'}
                   }
                 >
                   {categoryIcons[cat.slug] || '✨'} {cat.name}
@@ -161,12 +161,12 @@ function ShopContent() {
         {/* Products */}
         <div className="flex-1">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-black text-white">
+            <h2 className="text-xl font-black" style={{color: '#2c2c2c'}}>
               {selectedCategory
                 ? categories.find(c => c.slug === selectedCategory)?.name || 'Products'
                 : 'All Products'}
             </h2>
-            <span className="text-xs px-3 py-1 rounded-full" style={{background: 'rgba(255,255,255,0.05)', color: 'rgba(245,240,232,0.5)'}}>
+            <span className="text-xs px-3 py-1 rounded-full" style={{background: 'rgba(135,206,235,0.15)', color: 'rgba(44,44,44,0.5)'}}>
               {products.length} items
             </span>
           </div>
@@ -177,8 +177,8 @@ function ShopContent() {
               onClick={() => setSelectedCategory('')}
               className="shrink-0 px-4 py-1.5 rounded-full text-xs font-bold"
               style={selectedCategory === ''
-                ? {background: 'linear-gradient(135deg, #6b1530, #8b1a3b)', color: 'white'}
-                : {background: 'rgba(255,255,255,0.05)', color: 'rgba(245,240,232,0.6)', border: '1px solid rgba(180,120,40,0.2)'}
+                ? {background: 'linear-gradient(135deg, #1E90FF, #87CEEB)', color: 'white'}
+                : {background: 'white', color: 'rgba(44,44,44,0.6)', border: '1px solid rgba(135,206,235,0.3)'}
               }
             >
               All
@@ -189,8 +189,8 @@ function ShopContent() {
                 onClick={() => setSelectedCategory(cat.slug)}
                 className="shrink-0 px-4 py-1.5 rounded-full text-xs font-bold"
                 style={selectedCategory === cat.slug
-                  ? {background: 'linear-gradient(135deg, #6b1530, #8b1a3b)', color: 'white'}
-                  : {background: 'rgba(255,255,255,0.05)', color: 'rgba(245,240,232,0.6)', border: '1px solid rgba(180,120,40,0.2)'}
+                  ? {background: 'linear-gradient(135deg, #1E90FF, #87CEEB)', color: 'white'}
+                  : {background: 'white', color: 'rgba(44,44,44,0.6)', border: '1px solid rgba(135,206,235,0.3)'}
                 }
               >
                 {categoryIcons[cat.slug]} {cat.name}
@@ -201,18 +201,18 @@ function ShopContent() {
           {loading ? (
             <div className="text-center py-20">
               <p className="text-5xl mb-4">✨</p>
-              <p style={{color: 'rgba(245,240,232,0.5)'}}>Loading products...</p>
+              <p style={{color: 'rgba(44,44,44,0.4)'}}>Loading products...</p>
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-5xl mb-4">✨</p>
-              <p className="text-lg mb-6" style={{color: 'rgba(245,240,232,0.5)'}}>No products found.</p>
+              <p className="text-lg mb-6" style={{color: 'rgba(44,44,44,0.4)'}}>No products found.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {products.map((product) => (
                 <div key={product.id} className="card p-3 group">
-                  <div className="relative rounded-xl overflow-hidden mb-3" style={{background: 'rgba(107,21,48,0.2)', height: '160px'}}>
+                  <div className="relative rounded-xl overflow-hidden mb-3" style={{background: 'rgba(135,206,235,0.1)', height: '160px'}}>
                     {product.image_url ? (
                       <img
                         src={product.image_url}
@@ -228,21 +228,21 @@ function ShopContent() {
                       <div className="absolute top-2 left-2 badge text-xs">SALE</div>
                     )}
                   </div>
-                  <p className="text-xs mb-1" style={{color: 'rgba(246,211,101,0.6)'}}>{product.categories?.name}</p>
-                  <h3 className="font-semibold text-xs mb-2 line-clamp-2" style={{color: 'rgba(245,240,232,0.9)'}}>
+                  <p className="text-xs mb-1" style={{color: 'rgba(30,144,255,0.7)'}}>{product.categories?.name}</p>
+                  <h3 className="font-semibold text-xs mb-2 line-clamp-2" style={{color: '#2c2c2c'}}>
                     {product.name}
                   </h3>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="gold-text font-black text-sm">₦{product.price.toLocaleString()}</span>
+                    <span className="sky-text font-black text-sm">₦{product.price.toLocaleString()}</span>
                     {product.compare_price && (
-                      <span className="text-xs line-through" style={{color: 'rgba(245,240,232,0.3)'}}>
+                      <span className="text-xs line-through" style={{color: 'rgba(44,44,44,0.3)'}}>
                         ₦{product.compare_price.toLocaleString()}
                       </span>
                     )}
                   </div>
                   <button
                     onClick={() => addToCart(product)}
-                    className="w-full py-2 rounded-xl text-xs font-black text-white transition-all hover:scale-105 burgundy-btn"
+                    className="w-full py-2 rounded-xl text-xs font-black text-white transition-all hover:scale-105 sky-btn"
                   >
                     + Add to Cart
                   </button>
@@ -258,21 +258,20 @@ function ShopContent() {
         <div className="fixed bottom-6 left-0 right-0 flex justify-center z-50 px-4">
           <Link
             href="/cart"
-            className="flex items-center gap-4 px-8 py-4 rounded-full font-black text-white shadow-2xl transition-all hover:scale-105"
-            style={{background: 'linear-gradient(135deg, #6b1530, #8b1a3b)', boxShadow: '0 8px 30px rgba(107,21,48,0.6)'}}
+            className="flex items-center gap-4 px-8 py-4 rounded-full font-black text-white shadow-2xl transition-all hover:scale-105 sky-btn"
           >
             <span>🛒 {cartCount} items</span>
-            <span style={{color: '#f6d365'}}>₦{cartTotal.toLocaleString()}</span>
+            <span>₦{cartTotal.toLocaleString()}</span>
             <span>→ Order via WhatsApp</span>
           </Link>
         </div>
       )}
 
       {/* Footer */}
-      <footer style={{background: '#0a0205', borderTop: '1px solid rgba(180,120,40,0.2)'}} className="py-12 px-4 mt-16">
+      <footer style={{background: '#ffffff', borderTop: '1px solid rgba(135,206,235,0.3)'}} className="py-12 px-4 mt-16">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-black mb-1 gold-text">✦ EVERLASTING</h2>
-          <p className="text-xs" style={{color: 'rgba(245,240,232,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
+          <h2 className="text-2xl font-black mb-1 sky-text">✦ EVERLASTING</h2>
+          <p className="text-xs" style={{color: 'rgba(44,44,44,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
         </div>
       </footer>
 
@@ -283,11 +282,11 @@ function ShopContent() {
 export default function ShopPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center" style={{background: '#0d0305'}}>
-        <p className="text-yellow-400 text-xl">✨ Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{background: '#fdf8f0'}}>
+        <p className="text-blue-400 text-xl">✨ Loading...</p>
       </div>
     }>
       <ShopContent />
     </Suspense>
   )
-}
+              }
