@@ -34,39 +34,34 @@ export default function CartPage() {
 
   const handleWhatsAppOrder = () => {
     if (cart.length === 0) return
-
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '2347041304966'
-
     let message = '🛍️ *New Order from Everlasting Store*\n\n'
     message += '*Items Ordered:*\n'
-
     cart.forEach((item, index) => {
       message += `${index + 1}. ${item.name}\n`
       message += `   Quantity: ${item.quantity}\n`
       message += `   Price: ₦${(item.price * item.quantity).toLocaleString()}\n\n`
     })
-
     message += `*Total: ₦${total.toLocaleString()}*\n\n`
-    message += '📍 *My location is: ________*\n💳 *Please send your account details as soon as possible*'
-
+    message += '📍 *Please send your delivery address*\n'
+    message += '💳 *Payment details will be sent to you*'
     const encodedMessage = encodeURIComponent(message)
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
-    window.open(whatsappUrl, '_blank')
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank')
   }
 
   return (
-    <div className="min-h-screen" style={{background: '#0d0305'}}>
+    <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
       {/* Navbar */}
-      <nav style={{background: 'linear-gradient(180deg, #1a0508 0%, rgba(26,5,8,0.97) 100%)', borderBottom: '1px solid rgba(180,120,40,0.3)'}} className="sticky top-0 z-50 shadow-2xl">
+      <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/">
             <div>
-              <h1 className="text-xl font-black tracking-wider gold-text">✦ EVERLASTING</h1>
-              <p className="text-xs tracking-widest" style={{color: 'rgba(246,211,101,0.6)'}}>STORE</p>
+              <h1 className="text-xl font-black tracking-wider sky-text">✦ EVERLASTING</h1>
+              <p className="text-xs tracking-widest" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
             </div>
           </Link>
-          <Link href="/shop" className="text-sm font-medium" style={{color: 'rgba(246,211,101,0.8)'}}>
+          <Link href="/shop" className="text-sm font-medium" style={{color: '#1E90FF'}}>
             ← Continue Shopping
           </Link>
         </div>
@@ -74,33 +69,29 @@ export default function CartPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="mb-8">
-          <p className="text-xs font-bold tracking-widest uppercase mb-1" style={{color: '#f6d365'}}>Your Selection</p>
-          <h1 className="text-3xl font-black text-white">
+          <p className="text-xs font-bold tracking-widest uppercase mb-1" style={{color: '#1E90FF'}}>Your Selection</p>
+          <h1 className="text-3xl font-black" style={{color: '#2c2c2c'}}>
             Shopping Cart
-            <span className="text-lg font-normal ml-3" style={{color: 'rgba(245,240,232,0.4)'}}>({cartCount} items)</span>
+            <span className="text-lg font-normal ml-3" style={{color: 'rgba(44,44,44,0.4)'}}>({cartCount} items)</span>
           </h1>
         </div>
 
         {cart.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-7xl mb-6">🛒</p>
-            <p className="text-2xl font-black text-white mb-2">Your cart is empty</p>
-            <p className="mb-8" style={{color: 'rgba(245,240,232,0.5)'}}>Add some beautiful products!</p>
-            <Link
-              href="/shop"
-              className="px-10 py-4 rounded-full font-black text-white transition-all hover:scale-105 inline-block burgundy-btn"
-            >
+            <p className="text-2xl font-black mb-2" style={{color: '#2c2c2c'}}>Your cart is empty</p>
+            <p className="mb-8" style={{color: 'rgba(44,44,44,0.5)'}}>Add some beautiful products!</p>
+            <Link href="/shop" className="px-10 py-4 rounded-full font-black text-white transition-all hover:scale-105 inline-block sky-btn">
               Shop Now →
             </Link>
           </div>
         ) : (
           <div className="flex flex-col gap-6">
 
-            {/* Cart Items */}
             <div className="space-y-4">
               {cart.map((item) => (
                 <div key={item.id} className="card p-4 flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{background: 'rgba(107,21,48,0.2)'}}>
+                  <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{background: 'rgba(135,206,235,0.1)'}}>
                     {item.image_url ? (
                       <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
                     ) : (
@@ -110,33 +101,25 @@ export default function CartPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm line-clamp-2" style={{color: 'rgba(245,240,232,0.9)'}}>
-                      {item.name}
-                    </h3>
-                    <p className="gold-text font-black text-base mt-1">
-                      ₦{item.price.toLocaleString()}
-                    </p>
+                    <h3 className="font-semibold text-sm line-clamp-2" style={{color: '#2c2c2c'}}>{item.name}</h3>
+                    <p className="sky-text font-black text-base mt-1">₦{item.price.toLocaleString()}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="w-8 h-8 rounded-full font-bold text-white flex items-center justify-center transition hover:scale-110"
-                      style={{background: 'rgba(107,21,48,0.4)', border: '1px solid rgba(180,120,40,0.3)'}}
+                      className="w-8 h-8 rounded-full font-bold flex items-center justify-center transition hover:scale-110"
+                      style={{background: 'rgba(135,206,235,0.2)', border: '1px solid rgba(135,206,235,0.4)', color: '#1E90FF'}}
                     >-</button>
-                    <span className="w-8 text-center font-bold text-white">{item.quantity}</span>
+                    <span className="w-8 text-center font-bold" style={{color: '#2c2c2c'}}>{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="w-8 h-8 rounded-full font-bold text-white flex items-center justify-center transition hover:scale-110"
-                      style={{background: 'rgba(107,21,48,0.4)', border: '1px solid rgba(180,120,40,0.3)'}}
+                      className="w-8 h-8 rounded-full font-bold flex items-center justify-center transition hover:scale-110"
+                      style={{background: 'rgba(135,206,235,0.2)', border: '1px solid rgba(135,206,235,0.4)', color: '#1E90FF'}}
                     >+</button>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="font-black gold-text">₦{(item.price * item.quantity).toLocaleString()}</p>
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="text-xs mt-1 transition hover:text-red-300"
-                      style={{color: 'rgba(245,240,232,0.3)'}}
-                    >
+                    <p className="font-black sky-text">₦{(item.price * item.quantity).toLocaleString()}</p>
+                    <button onClick={() => removeItem(item.id)} className="text-xs mt-1 text-red-400 hover:text-red-500 transition">
                       Remove
                     </button>
                   </div>
@@ -144,33 +127,25 @@ export default function CartPage() {
               ))}
             </div>
 
-            {/* Order Summary */}
             <div className="card p-6">
-              <h2 className="text-lg font-black text-white mb-5">Order Summary</h2>
+              <h2 className="text-lg font-black mb-5" style={{color: '#2c2c2c'}}>Order Summary</h2>
               <div className="space-y-3 mb-6">
                 {cart.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
-                    <span style={{color: 'rgba(245,240,232,0.5)'}}>
-                      {item.name} x{item.quantity}
-                    </span>
-                    <span className="font-bold" style={{color: 'rgba(245,240,232,0.8)'}}>
-                      ₦{(item.price * item.quantity).toLocaleString()}
-                    </span>
+                    <span style={{color: 'rgba(44,44,44,0.5)'}}>{item.name} x{item.quantity}</span>
+                    <span className="font-bold" style={{color: '#2c2c2c'}}>₦{(item.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
-                <div className="border-t pt-3 flex justify-between font-black text-xl" style={{borderColor: 'rgba(180,120,40,0.2)'}}>
-                  <span className="text-white">Total</span>
-                  <span className="gold-text">₦{total.toLocaleString()}</span>
+                <div className="border-t pt-3 flex justify-between font-black text-xl" style={{borderColor: 'rgba(135,206,235,0.3)'}}>
+                  <span style={{color: '#2c2c2c'}}>Total</span>
+                  <span className="sky-text">₦{total.toLocaleString()}</span>
                 </div>
               </div>
 
-              {/* WhatsApp Notice */}
               <div className="rounded-xl p-4 mb-4" style={{background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)'}}>
-                <p className="text-sm font-bold mb-1" style={{color: '#25d366'}}>
-                  📱 Order via WhatsApp
-                </p>
-                <p className="text-xs" style={{color: 'rgba(245,240,232,0.5)'}}>
-                  Click the button below to send your order to WhatsApp. Include your delivery address and we will send you payment details!
+                <p className="text-sm font-bold mb-1" style={{color: '#25d366'}}>📱 Order via WhatsApp</p>
+                <p className="text-xs" style={{color: 'rgba(44,44,44,0.5)'}}>
+                  Click below to send your order. Include your delivery address and we will send payment details!
                 </p>
               </div>
 
@@ -185,11 +160,7 @@ export default function CartPage() {
                 Order via WhatsApp
               </button>
 
-              <button
-                onClick={clearCart}
-                className="w-full mt-3 text-xs transition"
-                style={{color: 'rgba(245,240,232,0.3)'}}
-              >
+              <button onClick={clearCart} className="w-full mt-3 text-xs text-red-400 hover:text-red-500 transition">
                 Clear Cart
               </button>
             </div>
@@ -198,14 +169,13 @@ export default function CartPage() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer style={{background: '#0a0205', borderTop: '1px solid rgba(180,120,40,0.2)'}} className="py-12 px-4 mt-16">
+      <footer style={{background: '#ffffff', borderTop: '1px solid rgba(135,206,235,0.3)'}} className="py-12 px-4 mt-16">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-black mb-1 gold-text">✦ EVERLASTING</h2>
-          <p className="text-xs" style={{color: 'rgba(245,240,232,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
+          <h2 className="text-2xl font-black mb-1 sky-text">✦ EVERLASTING</h2>
+          <p className="text-xs" style={{color: 'rgba(44,44,44,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
         </div>
       </footer>
 
     </div>
   )
-}
+                        }
