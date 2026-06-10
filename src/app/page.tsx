@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Logo from '@/components/Logo'
 
 export default function Home() {
   const [categories, setCategories] = useState<any[]>([])
@@ -57,16 +58,24 @@ export default function Home() {
     'kids-wear': '👶',
   }
 
+  const getDiscount = (price: number, comparePrice: number) => {
+    if (!comparePrice || comparePrice <= price) return null
+    return Math.round(((comparePrice - price) / comparePrice) * 100)
+  }
+
   return (
     <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
       {/* Navbar */}
       <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <Link href="/">
-            <div>
-              <h1 className="text-2xl font-black tracking-wider sky-text">✦ EVERLASTING</h1>
-              <p className="text-xs tracking-widest" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
+            <div className="flex items-center gap-2">
+              <Logo size={38} />
+              <div>
+                <h1 className="text-xl font-black tracking-wider sky-text leading-tight">EVERLASTING</h1>
+                <p className="text-xs tracking-widest leading-tight" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
+              </div>
             </div>
           </Link>
           <div className="flex items-center gap-4">
@@ -78,7 +87,7 @@ export default function Home() {
                 <span className="text-lg">🛒</span>
               </div>
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs font-black flex items-center justify-center" style={{background: 'linear-gradient(135deg, #1E90FF, #87CEEB)', color: 'white'}}>
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs font-black flex items-center justify-center" style={{background: '#1E90FF', color: 'white'}}>
                   {cartCount}
                 </span>
               )}
@@ -93,7 +102,10 @@ export default function Home() {
         <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full opacity-15" style={{background: 'radial-gradient(circle, #1E90FF, transparent)', filter: 'blur(80px)'}}></div>
 
         <div className="max-w-6xl mx-auto px-4 py-20 text-center relative z-10 w-full">
-          <div className="inline-block mb-6 px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase" style={{background: 'rgba(135,206,235,0.2)', border: '1px solid rgba(135,206,235,0.4)', color: '#1E90FF'}}>
+          <div className="flex justify-center mb-6">
+            <Logo size={80} />
+          </div>
+          <div className="inline-block mb-4 px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase" style={{background: 'rgba(135,206,235,0.2)', border: '1px solid rgba(135,206,235,0.4)', color: '#1E90FF'}}>
             ✦ Premium Fashion & Perfumes
           </div>
           <h1 className="text-4xl sm:text-6xl font-black mb-6 leading-tight">
@@ -105,10 +117,7 @@ export default function Home() {
             Premium perfumes, abayas, jalabiya, slides and fashion — crafted for those who appreciate the finest things.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/shop"
-              className="px-10 py-4 rounded-full font-black text-lg text-white transition-all hover:scale-105 sky-btn"
-            >
+            <Link href="/shop" className="px-10 py-4 rounded-full font-black text-lg text-white transition-all hover:scale-105 sky-btn">
               Shop Now →
             </Link>
             <Link
@@ -119,7 +128,6 @@ export default function Home() {
               View Perfumes 🌸
             </Link>
           </div>
-
           <div className="flex justify-center gap-10 mt-16">
             {[
               {value: '100+', label: 'Products'},
@@ -143,11 +151,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/shop?category=${cat.slug}`}
-              className="card p-5 text-center cursor-pointer group"
-            >
+            <Link key={cat.id} href={`/shop?category=${cat.slug}`} className="card p-5 text-center cursor-pointer group">
               <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
                 {categoryIcons[cat.slug] || '✨'}
               </div>
@@ -160,7 +164,7 @@ export default function Home() {
       </div>
 
       {/* Featured Products */}
-      <div className="max-w-6xl mx-auto px-4 py-6 pb-20">
+      <div className="max-w-6xl mx-auto px-4 py-6 pb-24">
         <div className="text-center mb-10">
           <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{color: '#1E90FF'}}>Handpicked</p>
           <h2 className="text-3xl font-black" style={{color: '#2c2c2c'}}>New Arrivals</h2>
@@ -171,59 +175,60 @@ export default function Home() {
             <p className="text-lg" style={{color: 'rgba(44,44,44,0.4)'}}>Products coming soon!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-            {featuredProducts.map((product) => (
-              <div key={product.id} className="card p-4 group">
-                <div className="relative rounded-xl overflow-hidden mb-4" style={{background: 'rgba(135,206,235,0.1)', height: '180px'}}>
-                  {product.image_url ? (
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-5xl">✨</span>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {featuredProducts.map((product) => {
+              const discount = getDiscount(product.price, product.compare_price)
+              return (
+                <div key={product.id} className="bg-white rounded-lg overflow-hidden" style={{border: '1px solid #e8e8e8', boxShadow: '0 2px 8px rgba(0,0,0,0.06)'}}>
+                  <div className="relative" style={{background: '#f9f9f9', height: '180px'}}>
+                    {product.image_url ? (
+                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-5xl">✨</span>
+                      </div>
+                    )}
+                    {discount && (
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-black text-white" style={{background: '#ff4444'}}>
+                        -{discount}%
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <p className="text-xs mb-2 line-clamp-2" style={{color: '#2c2c2c', minHeight: '32px'}}>{product.name}</p>
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="font-black text-base" style={{color: '#1E90FF'}}>₦{product.price.toLocaleString()}</span>
+                      {product.compare_price && product.compare_price > product.price && (
+                        <span className="text-xs line-through" style={{color: '#999'}}>₦{product.compare_price.toLocaleString()}</span>
+                      )}
                     </div>
-                  )}
-                  {product.compare_price && (
-                    <div className="absolute top-2 left-2 badge">SALE</div>
-                  )}
+                    {discount && (
+                      <p className="text-xs font-bold mb-2" style={{color: '#ff4444'}}>-{discount}% OFF</p>
+                    )}
+                    <p className="text-xs mb-3" style={{color: '#3aaa35'}}>✓ In Stock</p>
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="w-full py-2.5 rounded font-bold text-sm text-white transition-all hover:scale-105 sky-btn"
+                    >
+                      🛒 Add to Cart
+                    </button>
+                  </div>
                 </div>
-                <p className="text-xs mb-1" style={{color: 'rgba(30,144,255,0.7)'}}>{product.categories?.name}</p>
-                <h3 className="font-semibold text-sm mb-2 line-clamp-2" style={{color: '#2c2c2c'}}>
-                  {product.name}
-                </h3>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="sky-text font-black text-base">₦{product.price.toLocaleString()}</span>
-                  {product.compare_price && (
-                    <span className="text-xs line-through" style={{color: 'rgba(44,44,44,0.3)'}}>
-                      ₦{product.compare_price.toLocaleString()}
-                    </span>
-                  )}
-                </div>
-                <button
-                  onClick={() => addToCart(product)}
-                  className="w-full py-2.5 rounded-xl text-sm font-black text-white transition-all hover:scale-105 sky-btn"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
 
       {/* Floating Cart */}
       {cartCount > 0 && (
-        <div className="fixed bottom-6 left-0 right-0 flex justify-center z-50 px-4">
+        <div className="fixed bottom-0 left-0 right-0 z-50 p-4" style={{background: 'white', borderTop: '1px solid #e0e0e0', boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'}}>
           <Link
             href="/cart"
-            className="flex items-center gap-4 px-8 py-4 rounded-full font-black text-white shadow-2xl transition-all hover:scale-105 sky-btn"
+            className="flex items-center justify-between px-6 py-3 rounded-full font-black text-white w-full transition-all hover:scale-105 sky-btn"
           >
             <span>🛒 {cartCount} items</span>
-            <span style={{color: '#fdf8f0'}}>₦{cartTotal.toLocaleString()}</span>
-            <span>→ Order via WhatsApp</span>
+            <span>₦{cartTotal.toLocaleString()} → Order via WhatsApp</span>
           </Link>
         </div>
       )}
@@ -236,10 +241,7 @@ export default function Home() {
             <h3 className="text-2xl sm:text-4xl font-black mb-2" style={{color: '#2c2c2c'}}>Order via WhatsApp,</h3>
             <h3 className="text-2xl sm:text-4xl font-black sky-text">Delivered to You</h3>
           </div>
-          <Link
-            href="/shop"
-            className="shrink-0 px-8 py-4 rounded-full font-black text-white transition-all hover:scale-105 sky-btn"
-          >
+          <Link href="/shop" className="shrink-0 px-8 py-4 rounded-full font-black text-white transition-all hover:scale-105 sky-btn">
             Start Shopping →
           </Link>
         </div>
@@ -248,7 +250,10 @@ export default function Home() {
       {/* Footer */}
       <footer style={{background: '#ffffff', borderTop: '1px solid rgba(135,206,235,0.3)'}} className="py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-black mb-1 sky-text">✦ EVERLASTING</h2>
+          <div className="flex justify-center mb-3">
+            <Logo size={50} />
+          </div>
+          <h2 className="text-3xl font-black mb-1 sky-text">EVERLASTING</h2>
           <p className="text-xs tracking-widest mb-4" style={{color: 'rgba(30,144,255,0.5)'}}>STORE</p>
           <p className="text-xs mb-6" style={{color: 'rgba(44,44,44,0.4)'}}>Premium Fashion & Perfumes</p>
           <div className="flex justify-center gap-8 text-sm mb-6">
@@ -268,4 +273,4 @@ export default function Home() {
 
     </div>
   )
-                }
+}
