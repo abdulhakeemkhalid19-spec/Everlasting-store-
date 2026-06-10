@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import Logo from '@/components/Logo'
 
 const UNSPLASH_IMAGES: any = {
   perfume: 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=500',
@@ -63,13 +64,9 @@ export default function AIUploadPage() {
     try {
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}.${fileExt}`
-      const { error } = await supabase.storage
-        .from('Product')
-        .upload(fileName, file, { upsert: true })
+      const { error } = await supabase.storage.from('Product').upload(fileName, file, { upsert: true })
       if (error) throw error
-      const { data: urlData } = supabase.storage
-        .from('Product')
-        .getPublicUrl(fileName)
+      const { data: urlData } = supabase.storage.from('Product').getPublicUrl(fileName)
       setForm((prev) => ({ ...prev, image_url: urlData.publicUrl }))
     } catch (error: any) {
       alert('Image upload failed: ' + error.message)
@@ -98,55 +95,43 @@ export default function AIUploadPage() {
         'Return only JSON no other text.',
       ].join(' ')
 
-      const response = await fetch(
-        'https://openrouter.ai/api/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + apiKey,
-            'HTTP-Referer': 'https://everlasting-store.vercel.app',
-            'X-Title': 'Everlasting Store',
-          },
-          body: JSON.stringify({
-            model: 'openrouter/auto',
-            messages: [{ role: 'user', content: prompt }],
-            max_tokens: 400,
-            temperature: 0.7,
-          }),
-        }
-      )
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + apiKey,
+          'HTTP-Referer': 'https://everlasting-store.vercel.app',
+          'X-Title': 'Everlasting Store',
+        },
+        body: JSON.stringify({
+          model: 'openrouter/auto',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 400,
+          temperature: 0.7,
+        }),
+      })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error('API error ' + response.status + ': ' + JSON.stringify(errorData))
-      }
-
+      if (!response.ok) throw new Error('API error ' + response.status)
       const data = await response.json()
       const text = data.choices?.[0]?.message?.content || ''
       const jsonMatch = text.match(/\{[\s\S]*\}/)
-      if (!jsonMatch) throw new Error('No JSON found in response')
+      if (!jsonMatch) throw new Error('No JSON found')
       const parsed = JSON.parse(jsonMatch[0])
 
       const matchedCategory = categories.find((cat) =>
-        cat.name.toLowerCase().includes(
-          (parsed.category || '').toLowerCase().split(' ')[0]
-        )
+        cat.name.toLowerCase().includes((parsed.category || '').toLowerCase().split(' ')[0])
       )
-
-      const imageUrl = getImage(productName, parsed.category || '')
 
       setForm({
         name: parsed.name || productName,
         description: parsed.description || '',
         price: parsed.price?.toString() || '',
         compare_price: parsed.compare_price?.toString() || '',
-        image_url: imageUrl,
+        image_url: getImage(productName, parsed.category || ''),
         category_id: matchedCategory?.id || '',
         stock_quantity: '100',
         is_active: true,
       })
-
       setGenerated(true)
     } catch (error: any) {
       alert('AI generation failed: ' + error.message)
@@ -176,29 +161,20 @@ export default function AIUploadPage() {
       is_active: form.is_active,
     })
     if (error) {
-      alert('Error saving: ' + error.message)
+      alert('Error: ' + error.message)
     } else {
       alert('✅ Product added!')
       setProductName('')
-      setForm({
-        name: '',
-        description: '',
-        price: '',
-        compare_price: '',
-        image_url: '',
-        category_id: '',
-        stock_quantity: '100',
-        is_active: true,
-      })
+      setForm({ name: '', description: '', price: '', compare_price: '', image_url: '', category_id: '', stock_quantity: '100', is_active: true })
       setGenerated(false)
     }
     setSaving(false)
   }
 
   const inputStyle = {
-    background: 'rgba(255,255,255,0.05)',
-    border: '1px solid rgba(180,120,40,0.3)',
-    color: 'white',
+    background: '#ffffff',
+    border: '1px solid rgba(135,206,235,0.5)',
+    color: '#2c2c2c',
     borderRadius: '12px',
     padding: '12px 16px',
     width: '100%',
@@ -207,37 +183,30 @@ export default function AIUploadPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{background: '#0d0305'}}>
+    <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
-      {/* Navbar */}
-      <nav style={{background: 'linear-gradient(180deg, #1a0508 0%, rgba(26,5,8,0.97) 100%)', borderBottom: '1px solid rgba(180,120,40,0.3)'}} className="sticky top-0 z-50 shadow-2xl">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/">
-              <h1 className="text-xl font-black tracking-wider gold-text">✦ EVERLASTING</h1>
-            </Link>
-            <span className="text-xs px-3 py-1 rounded-full font-bold" style={{background: 'rgba(180,120,40,0.2)', border: '1px solid rgba(180,120,40,0.4)', color: '#f6d365'}}>
-              ADMIN
-            </span>
+      <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Logo size={36} />
+            <div>
+              <h1 className="text-lg font-black tracking-wider sky-text leading-tight">EVERLASTING</h1>
+              <p className="text-xs tracking-widest leading-tight" style={{color: 'rgba(30,144,255,0.6)'}}>ADMIN</p>
+            </div>
           </div>
-          <Link href="/admin" className="text-sm transition" style={{color: 'rgba(246,211,101,0.7)'}}>
-            ← Dashboard
-          </Link>
+          <Link href="/admin" className="text-sm transition" style={{color: '#1E90FF'}}>← Dashboard</Link>
         </div>
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <p className="text-xs font-bold tracking-widest uppercase mb-1" style={{color: '#f6d365'}}>AI Powered</p>
-          <h1 className="text-3xl font-black text-white">AI Product Upload</h1>
-          <p className="text-sm mt-2" style={{color: 'rgba(245,240,232,0.5)'}}>Type a product name and AI fills everything automatically!</p>
+          <p className="text-xs font-bold tracking-widest uppercase mb-1" style={{color: '#1E90FF'}}>AI Powered</p>
+          <h1 className="text-3xl font-black" style={{color: '#2c2c2c'}}>AI Product Upload</h1>
+          <p className="text-sm mt-2" style={{color: 'rgba(44,44,44,0.5)'}}>Type a product name and AI fills everything automatically!</p>
         </div>
 
-        {/* AI Input */}
         <div className="card p-6 mb-6">
-          <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{color: '#f6d365'}}>
-            🤖 Enter Product Name
-          </p>
+          <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{color: '#1E90FF'}}>🤖 Enter Product Name</p>
           <div className="flex gap-3">
             <input
               type="text"
@@ -245,48 +214,36 @@ export default function AIUploadPage() {
               onChange={(e) => setProductName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && generateWithAI()}
               placeholder="e.g. Oud Al Shams Perfume, Black Abaya, Nike Slides..."
-              className="flex-1 px-4 py-3 rounded-xl text-white outline-none text-sm"
-              style={{background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(180,120,40,0.3)'}}
+              className="flex-1 px-4 py-3 rounded-xl outline-none text-sm"
+              style={{background: '#f5f5f5', border: '1px solid rgba(135,206,235,0.4)', color: '#2c2c2c'}}
             />
-            <button
-              onClick={generateWithAI}
-              disabled={loading}
-              className="px-6 py-3 rounded-xl font-black text-white transition hover:scale-105 disabled:opacity-40 shrink-0 burgundy-btn"
-            >
+            <button onClick={generateWithAI} disabled={loading} className="px-6 py-3 rounded-xl font-black text-white transition hover:scale-105 disabled:opacity-40 shrink-0 sky-btn">
               {loading ? '⏳' : '🤖 Generate'}
             </button>
           </div>
-          {loading && (
-            <p className="text-sm mt-4 text-center animate-pulse" style={{color: '#f6d365'}}>
-              🤖 AI is generating product details...
-            </p>
-          )}
+          {loading && <p className="text-sm mt-4 text-center animate-pulse" style={{color: '#1E90FF'}}>🤖 AI is generating product details...</p>}
         </div>
 
-        {/* Generated Form */}
         {generated && (
           <div className="card p-6 space-y-5">
             <p className="font-bold text-sm" style={{color: '#34d399'}}>✅ AI filled the details! Review and save.</p>
 
-            {/* Image */}
             <div>
-              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: 'rgba(245,240,232,0.5)'}}>
-                Product Image
-              </label>
+              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>Product Image</label>
               <div
                 className="w-full py-4 rounded-xl text-center cursor-pointer transition hover:scale-105 mb-3"
-                style={{background: 'rgba(107,21,48,0.15)', border: '2px dashed rgba(180,120,40,0.4)'}}
+                style={{background: 'rgba(135,206,235,0.08)', border: '2px dashed rgba(135,206,235,0.4)'}}
                 onClick={() => document.getElementById('ai-image-upload')?.click()}
               >
                 {uploadingImage ? (
-                  <p className="text-sm" style={{color: '#f6d365'}}>⏳ Uploading...</p>
+                  <p className="text-sm" style={{color: '#1E90FF'}}>⏳ Uploading...</p>
                 ) : form.image_url ? (
                   <div>
                     <img src={form.image_url} alt="Preview" className="h-24 rounded-xl object-cover mx-auto mb-2" onError={(e: any) => e.target.style.display='none'} />
-                    <p className="text-xs" style={{color: 'rgba(246,211,101,0.6)'}}>Tap to change</p>
+                    <p className="text-xs" style={{color: '#1E90FF'}}>Tap to change</p>
                   </div>
                 ) : (
-                  <p className="text-sm" style={{color: '#f6d365'}}>📸 Tap to upload from phone</p>
+                  <p className="text-sm" style={{color: '#1E90FF'}}>📸 Tap to upload from phone</p>
                 )}
               </div>
               <input id="ai-image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
@@ -294,49 +251,45 @@ export default function AIUploadPage() {
             </div>
 
             <div>
-              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: 'rgba(245,240,232,0.5)'}}>Product Name</label>
+              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>Product Name</label>
               <input type="text" name="name" value={form.name} onChange={handleChange} style={inputStyle} />
             </div>
 
             <div>
-              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: 'rgba(245,240,232,0.5)'}}>Description</label>
+              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>Description</label>
               <textarea name="description" value={form.description} onChange={handleChange} rows={3} style={inputStyle} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: 'rgba(245,240,232,0.5)'}}>Selling Price (₦)</label>
+                <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>Selling Price (₦)</label>
                 <input type="number" name="price" value={form.price} onChange={handleChange} style={inputStyle} />
               </div>
               <div>
-                <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: 'rgba(245,240,232,0.5)'}}>Original Price (₦)</label>
+                <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>Original Price (₦)</label>
                 <input type="number" name="compare_price" value={form.compare_price} onChange={handleChange} style={inputStyle} />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: 'rgba(245,240,232,0.5)'}}>Category</label>
-              <select name="category_id" value={form.category_id} onChange={handleChange} style={{...inputStyle, background: '#1a0508'}}>
+              <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>Category</label>
+              <select name="category_id" value={form.category_id} onChange={handleChange} style={{...inputStyle, background: '#ffffff'}}>
                 <option value="">Select category</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id} style={{background: '#1a0508'}}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>
 
             <div className="flex gap-3">
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex-1 py-4 rounded-xl font-black text-white transition hover:scale-105 disabled:opacity-40 burgundy-btn"
-              >
+              <button onClick={handleSave} disabled={saving} className="flex-1 py-4 rounded-xl font-black text-white transition hover:scale-105 disabled:opacity-40 sky-btn">
                 {saving ? '⏳ Saving...' : '✅ Save Product'}
               </button>
               <button
                 onClick={async () => { await handleSave(); setProductName(''); setGenerated(false) }}
                 disabled={saving}
                 className="flex-1 py-4 rounded-xl font-black transition hover:scale-105 disabled:opacity-40"
-                style={{background: 'rgba(246,211,101,0.15)', border: '1px solid rgba(246,211,101,0.3)', color: '#f6d365'}}
+                style={{background: 'rgba(135,206,235,0.15)', border: '1px solid rgba(135,206,235,0.4)', color: '#1E90FF'}}
               >
                 {saving ? '⏳' : '➕ Save & Add Another'}
               </button>
@@ -344,25 +297,23 @@ export default function AIUploadPage() {
           </div>
         )}
 
-        {/* Tips */}
         {!generated && !loading && (
-          <div className="card p-6" style={{border: '1px solid rgba(180,120,40,0.2)'}}>
-            <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{color: '#f6d365'}}>💡 Tips</p>
-            <div className="space-y-2 text-sm" style={{color: 'rgba(245,240,232,0.5)'}}>
-              <p>• Perfume: <span style={{color: '#f6d365'}}>"Oud Al Shams 100ml"</span></p>
-              <p>• Abaya: <span style={{color: '#f6d365'}}>"Black Embroidered Abaya"</span></p>
-              <p>• Slides: <span style={{color: '#f6d365'}}>"Nike Benassi Slides White"</span></p>
-              <p>• Jalabiya: <span style={{color: '#f6d365'}}>"White Cotton Jalabiya Men"</span></p>
+          <div className="card p-6">
+            <p className="text-xs font-bold tracking-widest uppercase mb-4" style={{color: '#1E90FF'}}>💡 Tips</p>
+            <div className="space-y-2 text-sm" style={{color: 'rgba(44,44,44,0.5)'}}>
+              <p>• Perfume: <span style={{color: '#1E90FF'}}>"Oud Al Shams 100ml"</span></p>
+              <p>• Abaya: <span style={{color: '#1E90FF'}}>"Black Embroidered Abaya"</span></p>
+              <p>• Slides: <span style={{color: '#1E90FF'}}>"Nike Benassi Slides White"</span></p>
+              <p>• Jalabiya: <span style={{color: '#1E90FF'}}>"White Cotton Jalabiya Men"</span></p>
             </div>
           </div>
         )}
       </div>
 
-      {/* Footer */}
-      <footer style={{background: '#0a0205', borderTop: '1px solid rgba(180,120,40,0.2)'}} className="py-12 px-4 mt-16">
+      <footer style={{background: '#ffffff', borderTop: '1px solid rgba(135,206,235,0.3)'}} className="py-12 px-4 mt-16">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-black mb-1 gold-text">✦ EVERLASTING</h2>
-          <p className="text-xs" style={{color: 'rgba(245,240,232,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
+          <h2 className="text-2xl font-black mb-1 sky-text">EVERLASTING STORE</h2>
+          <p className="text-xs" style={{color: 'rgba(44,44,44,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
         </div>
       </footer>
 
