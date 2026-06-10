@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import Logo from '@/components/Logo'
 
 function ShopContent() {
   const [products, setProducts] = useState<any[]>([])
@@ -100,9 +101,12 @@ function ShopContent() {
       <nav style={{background: '#ffffff', borderBottom: '1px solid #e0e0e0', boxShadow: '0 2px 8px rgba(0,0,0,0.08)'}} className="sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <Link href="/">
-            <div>
-              <h1 className="text-xl font-black tracking-wider sky-text">✦ EVERLASTING</h1>
-              <p className="text-xs tracking-widest" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
+            <div className="flex items-center gap-2">
+              <Logo size={36} />
+              <div>
+                <h1 className="text-lg font-black tracking-wider sky-text leading-tight">EVERLASTING</h1>
+                <p className="text-xs tracking-widest leading-tight" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
+              </div>
             </div>
           </Link>
           <div className="flex-1 max-w-md">
@@ -131,7 +135,7 @@ function ShopContent() {
         </div>
       </nav>
 
-      {/* Category tabs */}
+      {/* Category Tabs */}
       <div style={{background: '#ffffff', borderBottom: '1px solid #e0e0e0'}}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex gap-0 overflow-x-auto">
@@ -187,36 +191,39 @@ function ShopContent() {
               const discount = getDiscount(product.price, product.compare_price)
               const isAdded = addedProduct === product.id
               return (
-                     <div key={product.id} className="bg-white rounded-lg overflow-hidden" style={{border: '1px solid #e8e8e8', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
-                                    <Link href={`/product/${product.id}`}>
-                  {/* Product Image */}
-                  <div className="relative" style={{background: '#f9f9f9', height: '180px'}}>
-                    {product.image_url ? (
-                      <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-5xl">✨</span>
-                      </div>
-                    )}
-                    {discount && (
-                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-black text-white" style={{background: '#ff4444'}}>
-                        -{discount}%
-                      </div>
-                    )}
-                  </div>
+                <div key={product.id} className="bg-white rounded-lg overflow-hidden" style={{border: '1px solid #e8e8e8', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
 
-                  {/* Product Info */}
+                  {/* Clickable image and name */}
+                  <Link href={`/product/${product.id}`}>
+                    <div className="relative" style={{background: '#f9f9f9', height: '180px'}}>
+                      {product.image_url ? (
+                        <img
+                          src={product.image_url}
+                          alt={product.name}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-5xl">✨</span>
+                        </div>
+                      )}
+                      {discount && (
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-black text-white" style={{background: '#ff4444'}}>
+                          -{discount}%
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+
                   <div className="p-3">
-                    <p className="text-xs mb-1 line-clamp-2 leading-snug" style={{color: '#2c2c2c', minHeight: '32px'}}>
-                      {product.name}
-                    </p>
+                    <Link href={`/product/${product.id}`}>
+                      <p className="text-xs mb-1 line-clamp-2 leading-snug hover:text-blue-500 transition-colors cursor-pointer" style={{color: '#2c2c2c', minHeight: '32px'}}>
+                        {product.name}
+                      </p>
+                    </Link>
 
-                    {/* Price Section - Jumia Style */}
-                    <div className="mt-2 mb-2">
+                    {/* Price - Jumia Style */}
+                    <div className="mt-2 mb-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-base font-black" style={{color: '#1E90FF'}}>
                           ₦{product.price.toLocaleString()}
@@ -235,11 +242,9 @@ function ShopContent() {
                     </div>
 
                     {/* In Stock */}
-                    <p className="text-xs mb-3" style={{color: '#3aaa35'}}>
-                      ✓ In Stock
-                    </p>
+                    <p className="text-xs mb-3" style={{color: '#3aaa35'}}>✓ In Stock</p>
 
-                    {/* Add to Cart Button - Jumia Style */}
+                    {/* Add to Cart Button */}
                     <button
                       onClick={() => addToCart(product)}
                       className="w-full py-2.5 rounded font-bold text-sm text-white transition-all"
@@ -264,8 +269,7 @@ function ShopContent() {
         <div className="fixed bottom-0 left-0 right-0 z-50 p-4" style={{background: 'white', borderTop: '1px solid #e0e0e0', boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'}}>
           <Link
             href="/cart"
-            className="flex items-center justify-between px-6 py-3 rounded-full font-black text-white w-full transition-all hover:scale-105"
-            style={{background: 'linear-gradient(135deg, #1E90FF, #87CEEB)'}}
+            className="flex items-center justify-between px-6 py-3 rounded-full font-black text-white w-full transition-all hover:scale-105 sky-btn"
           >
             <span>🛒 {cartCount} items in cart</span>
             <span>₦{cartTotal.toLocaleString()} → Order</span>
@@ -276,7 +280,10 @@ function ShopContent() {
       {/* Footer */}
       <footer style={{background: '#ffffff', borderTop: '1px solid #e0e0e0'}} className="py-12 px-4 mt-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-black mb-1 sky-text">✦ EVERLASTING</h2>
+          <div className="flex justify-center mb-3">
+            <Logo size={40} />
+          </div>
+          <h2 className="text-2xl font-black mb-1 sky-text">EVERLASTING STORE</h2>
           <p className="text-xs" style={{color: 'rgba(44,44,44,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
         </div>
       </footer>
