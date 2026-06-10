@@ -1,9 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Logo from '@/components/Logo'
 
 export default function CartPage() {
   const [cart, setCart] = useState<any[]>([])
+  const [address, setAddress] = useState('')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('everlasting-cart') || '[]')
@@ -34,26 +38,44 @@ export default function CartPage() {
 
   const handleWhatsAppOrder = () => {
     if (cart.length === 0) return
+    if (!name.trim()) {
+      alert('Please enter your full name!')
+      return
+    }
+    if (!phone.trim()) {
+      alert('Please enter your phone number!')
+      return
+    }
+    if (!address.trim()) {
+      alert('Please enter your delivery address!')
+      return
+    }
+
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '2347041304966'
 
     let message = '🛍️ *NEW ORDER - Everlasting Store*\n'
     message += '━━━━━━━━━━━━━━━━━━━━\n\n'
 
+    message += '👤 *Customer Details:*\n'
+    message += `   Name: ${name}\n`
+    message += `   Phone: ${phone}\n`
+    message += `   Address: ${address}\n\n`
+
+    message += '🛒 *Items Ordered:*\n'
     cart.forEach((item, index) => {
-      message += `*${index + 1}. ${item.name}*\n`
-      message += `   💰 Price: ₦${item.price.toLocaleString()} x ${item.quantity}\n`
-      message += `   💵 Subtotal: ₦${(item.price * item.quantity).toLocaleString()}\n`
+      message += `\n${index + 1}. *${item.name}*\n`
+      message += `   Qty: ${item.quantity}\n`
+      message += `   Price: ₦${item.price.toLocaleString()} x ${item.quantity}\n`
+      message += `   Subtotal: ₦${(item.price * item.quantity).toLocaleString()}\n`
       if (item.image_url) {
-        message += `   🖼️ Image: ${item.image_url}\n`
+        message += `   Photo: ${item.image_url}\n`
       }
-      message += '\n'
     })
 
-    message += '━━━━━━━━━━━━━━━━━━━━\n'
-    message += `🧾 *TOTAL: ₦${total.toLocaleString()}*\n`
+    message += '\n━━━━━━━━━━━━━━━━━━━━\n'
+    message += `💰 *TOTAL: ₦${total.toLocaleString()}*\n`
     message += '━━━━━━━━━━━━━━━━━━━━\n\n'
-    message += '📍 *My delivery address:*\n'
-    message += '⏳ Waiting for payment details...'
+    message += '⏳ _Waiting for payment details..._'
 
     const encodedMessage = encodeURIComponent(message)
     window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank')
@@ -64,16 +86,30 @@ export default function CartPage() {
     return Math.round(((comparePrice - price) / comparePrice) * 100)
   }
 
+  const inputStyle = {
+    background: '#ffffff',
+    border: '1px solid rgba(135,206,235,0.5)',
+    color: '#2c2c2c',
+    borderRadius: '12px',
+    padding: '12px 16px',
+    width: '100%',
+    outline: 'none',
+    fontSize: '14px',
+  }
+
   return (
     <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
       {/* Navbar */}
       <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/">
-            <div>
-              <h1 className="text-xl font-black tracking-wider sky-text">✦ EVERLASTING</h1>
-              <p className="text-xs tracking-widest" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
+            <div className="flex items-center gap-2">
+              <Logo size={36} />
+              <div>
+                <h1 className="text-lg font-black tracking-wider sky-text leading-tight">EVERLASTING</h1>
+                <p className="text-xs tracking-widest leading-tight" style={{color: 'rgba(30,144,255,0.6)'}}>STORE</p>
+              </div>
             </div>
           </Link>
           <Link href="/shop" className="text-sm font-medium" style={{color: '#1E90FF'}}>
@@ -102,6 +138,8 @@ export default function CartPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
+
+            {/* Cart Items */}
             <div className="space-y-4">
               {cart.map((item) => {
                 const discount = getDiscount(item.price, item.compare_price)
@@ -116,7 +154,7 @@ export default function CartPage() {
                         </div>
                       )}
                       {discount && (
-                        <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded-lg text-xs font-black text-white" style={{background: '#ff4444'}}>
+                        <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-xs font-black text-white" style={{background: '#ff4444'}}>
                           -{discount}%
                         </div>
                       )}
@@ -154,6 +192,52 @@ export default function CartPage() {
               })}
             </div>
 
+            {/* Delivery Details */}
+            <div className="card p-6">
+              <h2 className="text-lg font-black mb-5" style={{color: '#2c2c2c'}}>
+                📦 Delivery Details
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Abdulhakeem Khalid"
+                    style={inputStyle}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. 08012345678"
+                    style={inputStyle}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold block mb-2 uppercase tracking-wider" style={{color: '#2c2c2c'}}>
+                    Full Delivery Address *
+                  </label>
+                  <textarea
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="e.g. No 20 Animashaun Street, Mapo, Ibadan, Oyo State"
+                    rows={3}
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Order Summary */}
             <div className="card p-6">
               <h2 className="text-lg font-black mb-5" style={{color: '#2c2c2c'}}>Order Summary</h2>
               <div className="space-y-3 mb-6">
@@ -172,7 +256,7 @@ export default function CartPage() {
               <div className="rounded-xl p-4 mb-4" style={{background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)'}}>
                 <p className="text-sm font-bold mb-1" style={{color: '#25d366'}}>📱 Order via WhatsApp</p>
                 <p className="text-xs" style={{color: 'rgba(44,44,44,0.5)'}}>
-                  Your order details including product images will be sent to WhatsApp. Add your delivery address and we will send payment details!
+                  Fill in your details above then click the button below. Your order with product images will be sent directly to our WhatsApp!
                 </p>
               </div>
 
@@ -191,17 +275,21 @@ export default function CartPage() {
                 Clear Cart
               </button>
             </div>
+
           </div>
         )}
       </div>
 
       <footer style={{background: '#ffffff', borderTop: '1px solid rgba(135,206,235,0.3)'}} className="py-12 px-4 mt-16">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-black mb-1 sky-text">✦ EVERLASTING</h2>
+          <div className="flex justify-center mb-3">
+            <Logo size={40} />
+          </div>
+          <h2 className="text-2xl font-black mb-1 sky-text">EVERLASTING STORE</h2>
           <p className="text-xs" style={{color: 'rgba(44,44,44,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
         </div>
       </footer>
 
     </div>
   )
-                                  }
+                    }
