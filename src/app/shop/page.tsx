@@ -187,8 +187,8 @@ function ShopContent() {
               const discount = getDiscount(product.price, product.compare_price)
               const isAdded = addedProduct === product.id
               return (
-                <div key={product.id} className="bg-white rounded-lg overflow-hidden" style={{border: '1px solid #e8e8e8', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
-
+                     <div key={product.id} className="bg-white rounded-lg overflow-hidden" style={{border: '1px solid #e8e8e8', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
+                                    <Link href={`/product/${product.id}`}>
                   {/* Product Image */}
                   <div className="relative" style={{background: '#f9f9f9', height: '180px'}}>
                     {product.image_url ? (
