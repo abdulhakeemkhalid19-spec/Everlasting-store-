@@ -275,10 +275,13 @@ export default function Home() {
           <h2 className="text-3xl font-black mb-1 sky-text">EVERLASTING</h2>
           <p className="text-xs tracking-widest mb-4" style={{color: 'rgba(30,144,255,0.5)'}}>STORE</p>
           <p className="text-xs mb-6" style={{color: 'rgba(44,44,44,0.4)'}}>Premium Fashion & Perfumes</p>
-          <div className="flex justify-center gap-8 text-sm mb-6">
+          <div className="flex flex-wrap justify-center gap-6 text-sm mb-6">
             {[
               {href: '/shop', label: 'Shop'},
               {href: '/cart', label: 'Cart'},
+              {href: '/about', label: 'About Us'},
+              {href: '/faq', label: 'FAQ'},
+              {href: '/size-guide', label: 'Size Guide'},
               {href: '/admin', label: 'Admin'},
             ].map((link) => (
               <Link key={link.href} href={link.href} className="hover:text-blue-500 transition" style={{color: 'rgba(30,144,255,0.6)'}}>
