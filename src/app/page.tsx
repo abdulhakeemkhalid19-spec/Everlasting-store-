@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import Logo from '@/components/Logo'
+import Logo from '@/components/Logo'
+import PromoBanner from '@/components/PromoBanner'
+import Testimonials from '@/components/Testimonials'
 
 export default function Home() {
   const [categories, setCategories] = useState<any[]>([])
