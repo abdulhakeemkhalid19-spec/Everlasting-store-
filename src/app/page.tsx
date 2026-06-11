@@ -69,6 +69,11 @@ export default function Home() {
   return (
     <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
+      {/* Promo Banner */}
+      <PromoBanner />
+
+      {/* Navbar */}
+
       {/* Navbar */}
       <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -236,7 +241,11 @@ export default function Home() {
         </div>
       )}
 
-      {/* Banner */}
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* Footer */}
+      <footer
       <div className="mx-4 mb-16 rounded-3xl overflow-hidden" style={{background: 'linear-gradient(135deg, #e8f4fd, #ffffff)', border: '1px solid rgba(135,206,235,0.4)'}}>
         <div className="max-w-6xl mx-auto px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
