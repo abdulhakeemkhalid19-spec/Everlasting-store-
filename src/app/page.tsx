@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import Logo from '@/components/Logo'
-import Logo from '@/components/Logo'
 import PromoBanner from '@/components/PromoBanner'
 import Testimonials from '@/components/Testimonials'
 
@@ -11,6 +10,7 @@ export default function Home() {
   const [categories, setCategories] = useState<any[]>([])
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([])
   const [cart, setCart] = useState<any[]>([])
+  const [addedProduct, setAddedProduct] = useState<string | null>(null)
 
   useEffect(() => {
     fetchCategories()
@@ -34,17 +34,20 @@ export default function Home() {
   }
 
   const addToCart = (product: any) => {
-    const existing = cart.find((item) => item.id === product.id)
+    const saved = JSON.parse(localStorage.getItem('everlasting-cart') || '[]')
+    const existing = saved.find((item: any) => item.id === product.id)
     let updated
     if (existing) {
-      updated = cart.map((item) =>
+      updated = saved.map((item: any) =>
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       )
     } else {
-      updated = [...cart, { ...product, quantity: 1 }]
+      updated = [...saved, { ...product, quantity: 1 }]
     }
     setCart(updated)
     localStorage.setItem('everlasting-cart', JSON.stringify(updated))
+    setAddedProduct(product.id)
+    setTimeout(() => setAddedProduct(null), 2000)
   }
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0)
@@ -69,12 +72,8 @@ export default function Home() {
   return (
     <div className="min-h-screen" style={{background: '#fdf8f0'}}>
 
-      {/* Promo Banner */}
       <PromoBanner />
 
-      {/* Navbar */}
-
-      {/* Navbar */}
       <nav style={{background: '#ffffff', borderBottom: '1px solid rgba(135,206,235,0.4)', boxShadow: '0 2px 20px rgba(135,206,235,0.15)'}} className="sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <Link href="/">
@@ -108,7 +107,6 @@ export default function Home() {
       <div className="relative overflow-hidden" style={{background: 'linear-gradient(135deg, #fdf8f0 0%, #e8f4fd 50%, #fdf8f0 100%)', minHeight: '90vh', display: 'flex', alignItems: 'center'}}>
         <div className="absolute top-10 left-10 w-80 h-80 rounded-full opacity-20" style={{background: 'radial-gradient(circle, #87CEEB, transparent)', filter: 'blur(60px)'}}></div>
         <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full opacity-15" style={{background: 'radial-gradient(circle, #1E90FF, transparent)', filter: 'blur(80px)'}}></div>
-
         <div className="max-w-6xl mx-auto px-4 py-20 text-center relative z-10 w-full">
           <div className="flex justify-center mb-6">
             <Logo size={80} />
@@ -186,24 +184,29 @@ export default function Home() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {featuredProducts.map((product) => {
               const discount = getDiscount(product.price, product.compare_price)
+              const isAdded = addedProduct === product.id
               return (
                 <div key={product.id} className="bg-white rounded-lg overflow-hidden" style={{border: '1px solid #e8e8e8', boxShadow: '0 2px 8px rgba(0,0,0,0.06)'}}>
-                  <div className="relative" style={{background: '#f9f9f9', height: '180px'}}>
-                    {product.image_url ? (
-                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-5xl">✨</span>
-                      </div>
-                    )}
-                    {discount && (
-                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-black text-white" style={{background: '#ff4444'}}>
-                        -{discount}%
-                      </div>
-                    )}
-                  </div>
+                  <Link href={`/product/${product.id}`}>
+                    <div className="relative" style={{background: '#f9f9f9', height: '180px'}}>
+                      {product.image_url ? (
+                        <img src={product.image_url} alt={product.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-5xl">✨</span>
+                        </div>
+                      )}
+                      {discount && (
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-black text-white" style={{background: '#ff4444'}}>
+                          -{discount}%
+                        </div>
+                      )}
+                    </div>
+                  </Link>
                   <div className="p-3">
-                    <p className="text-xs mb-2 line-clamp-2" style={{color: '#2c2c2c', minHeight: '32px'}}>{product.name}</p>
+                    <Link href={`/product/${product.id}`}>
+                      <p className="text-xs mb-2 line-clamp-2 hover:text-blue-500 transition-colors" style={{color: '#2c2c2c', minHeight: '32px'}}>{product.name}</p>
+                    </Link>
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span className="font-black text-base" style={{color: '#1E90FF'}}>₦{product.price.toLocaleString()}</span>
                       {product.compare_price && product.compare_price > product.price && (
@@ -217,8 +220,13 @@ export default function Home() {
                     <button
                       onClick={() => addToCart(product)}
                       className="w-full py-2.5 rounded font-bold text-sm text-white transition-all hover:scale-105 sky-btn"
+                      style={{
+                        background: isAdded
+                          ? 'linear-gradient(135deg, #34d399, #059669)'
+                          : undefined
+                      }}
                     >
-                      🛒 Add to Cart
+                      {isAdded ? '✅ Added!' : '🛒 Add to Cart'}
                     </button>
                   </div>
                 </div>
@@ -244,8 +252,7 @@ export default function Home() {
       {/* Testimonials */}
       <Testimonials />
 
-      {/* Footer */}
-      <footer
+      {/* Banner */}
       <div className="mx-4 mb-16 rounded-3xl overflow-hidden" style={{background: 'linear-gradient(135deg, #e8f4fd, #ffffff)', border: '1px solid rgba(135,206,235,0.4)'}}>
         <div className="max-w-6xl mx-auto px-8 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
@@ -285,4 +292,4 @@ export default function Home() {
 
     </div>
   )
-}
+                }
