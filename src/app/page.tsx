@@ -374,11 +374,13 @@ export default function Home() {
               </Link>
             ))}
           </div>
-
           <div className="text-center">
+            <div className="flex justify-center gap-4 text-xs mb-3">
+              <Link href="/privacy" style={{color: 'rgba(30,144,255,0.6)'}}>Privacy Policy</Link>
+              <Link href="/terms" style={{color: 'rgba(30,144,255,0.6)'}}>Terms & Conditions</Link>
+            </div>
             <p className="text-xs" style={{color: 'rgba(44,44,44,0.2)'}}>© 2024 Everlasting Store. All rights reserved.</p>
           </div>
-
         </div>
       </footer>
 
