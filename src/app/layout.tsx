@@ -2,7 +2,10 @@ import type { Metadata } from 'next'
 import './globals.css'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import BackToTop from '@/components/BackToTop'
-import CookieConsent from '@/components/CookieConsent'
+import CookieConsent from '@/components/ CookieConsent'
+import PushNotificationInit from '@/components/PushNotificationInit'
+// inside <body>:
+<PushNotificationInit />
 
 export const metadata: Metadata = {
   title: 'Everlasting Store - Premium Fashion & Perfumes',
