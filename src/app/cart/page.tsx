@@ -292,10 +292,7 @@ export default function CartPage() {
                     <p className="text-xs font-bold" style={{color: '#34d399'}}>✅ {appliedCoupon.code} applied!</p>
                     <button onClick={() => { setAppliedCoupon(null); setCouponMsg(''); setCouponCode('') }} className="text-xs text-red-400">Remove</button>
                   </div>
-                )}
-                <p className="text-xs mt-2" style={{color: 'rgba(44,44,44,0.4)'}}>
-                  Try: WELCOME500, NEWUSER10, EVERLASTING, SAVE5
-                </p>
+                ))
               </div>
 
               {/* Totals */}
