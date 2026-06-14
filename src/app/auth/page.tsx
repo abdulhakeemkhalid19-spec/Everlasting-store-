@@ -132,7 +132,10 @@ function AuthContent() {
           amount: 500,
           description: `${signupForm.full_name} joined using your referral code!`,
         })
-        await supabase.rpc('increment_reward', { user_id: referrerId, amount: 500 }).catch(() => {
+          const { error } = await supabase.rpc('increment_reward', { ... })
+            if (error) {
+              // handle error
+            }
           supabase.from('profiles').update({ reward_balance: 500 }).eq('id', referrerId)
         })
       }
