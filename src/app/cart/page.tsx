@@ -147,7 +147,7 @@ export default function CartPage() {
     window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank')
   }
 
-  const inputStyle = {
+const inputStyle = {
     background: '#ffffff',
     border: '1px solid rgba(135,206,235,0.5)',
     color: '#2c2c2c',
