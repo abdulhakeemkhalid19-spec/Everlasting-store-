@@ -114,6 +114,9 @@ export default function Home() {
                   {cartCount}
                 </span>
               )}
+              <Link href="/account" className="text-sm font-medium hidden sm:block" style={{color: '#1E90FF'}}>
+              Account
+            </Link>
             </Link>
           </div>
         </div>
